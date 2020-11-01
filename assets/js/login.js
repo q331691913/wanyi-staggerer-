@@ -1,5 +1,6 @@
 $(function() {
-
+    let form = layui.form
+    let layer = layui.layer
     $('#link_reg').on('click', function() {
         $('.log-box').hide()
         $('.reg-box').show()
@@ -8,38 +9,25 @@ $(function() {
         $('.log-box').show()
         $('.reg-box').hide()
     })
-    let from = layui.from
-    let layer = layui.layer
     form.verify({
-            username: function(value, item) { //value：表单的值、item：表单的DOM对象
-                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                    return '用户名不能有特殊字符';
-                }
-                if (/(^\_)|(\__)|(\_+$)/.test(value)) {
-                    return '用户名首尾不能出现下划线\'_\'';
-                }
-                if (/^\d+\d+\d$/.test(value)) {
-                    return '用户名不能全为数字';
-                }
-            },
-            pass: [
-                /^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'
-            ],
-            repass: function(value) {
-                let pwd = $('.reg-box [name=password]').val()
-                if (pwd !== value) {
-                    return layer.msg('两次密码不一致', { icon: 6 });
-                }
+        pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
+        repwd: function(value) {
+            // 通过形参拿到的是确认密码框中的内容
+            // 还需要拿到密码框中的内容
+            // 然后进行一次等于的判断
+            // 如果判断失败，则 return 一个提示消息即可
+            var pwd = $('.reg-box [name=password]').val();
+            if (pwd !== value) {
+                return '两次密码不一致！';
             }
-
-
-        })
-        //注册提交
+        }
+    });
+    //注册提交
     $('#form_reg').on('submit', function(e) {
-            e.preventfalut()
+            e.preventDefault()
             let data = {
-                usename: $('#form_reg[name=usename]').val(),
-                password: $('#form_reg[name=password]').val()
+                username: $('#form_reg [name=username]').val(),
+                password: $('#form_reg [name=password]').val()
             }
             $.post('/api/reguser', data, function(res) {
                 if (res.status !== 0) {
@@ -52,19 +40,23 @@ $(function() {
         })
         //登录提交
     $('#form_login').on('submit', function(e) {
-        e.preventfalut()
+        e.preventDefault();
+        console.log($(this).serialize());
         $.ajax({
-            method: 'POST',
             url: '/api/login',
+            method: 'POST',
+            // 快速获取表单中的数据
             data: $(this).serialize(),
-            success(res) {
+            success: function(res) {
                 if (res.status !== 0) {
-                    return layer.msg('登录失败', { icon: 6 })
+                    return layer.msg('登录失败！');
                 }
-                layer.msg('登录成功', { icon: 6 })
-                localStorage.setItem('token', res.token)
-                location.href = '/index.html'
+                layer.msg('登录成功');
+                // 存储
+                localStorage.setItem('token', res.token);
+                // 跳转到后台主页
+                location.href = "/index.html";
             }
-        })
-    })
+        });
+    });
 })
