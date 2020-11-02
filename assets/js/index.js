@@ -30,7 +30,7 @@ function getUserInfo() {
                 if (res.status !== 0) {
                     return layer.msg('获取用户信息失败', { icon: 6 })
                 }
-                console.log(res);
+                // console.log(res);
                 renderAvatar(res.data)
             }
         })
