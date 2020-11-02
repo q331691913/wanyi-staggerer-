@@ -51,6 +51,8 @@ $(function() {
                 if (res.status !== 0) {
                     return layer.msg('登录失败！');
                 }
+
+                console.log(res);
                 layer.msg('登录成功');
                 // 存储
                 localStorage.setItem('token', res.token);
