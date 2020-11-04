@@ -8,7 +8,7 @@ $(function() {
             method: 'GET',
             url: '/my/article/cates',
             success(res) {
-                console.log(res);
+                // console.log(res);
                 let htmlStr = template('tpl-table', res)
                 $('tbody').html(htmlStr)
             }
@@ -78,6 +78,7 @@ $(function() {
     })
     $('tbody').on('click', '.btn-delete', function() {
         let id = $(this).attr('data-id')
+        console.log(id);
         layer.confirm('你确定删除吗?', { icon: 3, title: '提示' }, function(index) {
             $.ajax({
                 method: 'GET',
@@ -92,7 +93,47 @@ $(function() {
                 }
             })
 
-
+            $.each('')
         });
     })
+    $("thead").on("click", "#checkAll", function() {
+        // let newCheckbox = document.querySelectorAll('#delete_checkbox')
+        $('.delEte').prop('checked', $(this).prop('checked'))
+    })
+
+    $('.removeClass').on('click', function() {
+        let flag = true
+        $('.delEte').each(function() {
+            if ($(this).is(':checked')) {
+                let id = ($(this).attr('data-id')) //逐个获取id
+                if (id > 2) {
+                    $.ajax({
+                        method: 'GET',
+                        url: `/my/article/deletecate/${id}`,
+                        success(res) {
+                            if (res.status !== 0) {
+                                flag = false
+                                return layer.msg('删除分类失败')
+                            }
+                            initArtCateList()
+
+                        }
+                    })
+                }
+            }
+        });
+        if (flag) {
+            layer.msg('删除分类成功')
+
+        }
+
+
+    })
+
+
+
+
+
+
+
 })
