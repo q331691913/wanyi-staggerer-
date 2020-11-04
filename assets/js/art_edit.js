@@ -101,6 +101,7 @@ $(function() {
     // 文章编辑
     // console.log(location.search); // ?Id=28476
     var idx = location.search.substring(1).split('=')[1];
+
     $.ajax({
         method: 'GET',
         url: `/my/article/${idx}`,

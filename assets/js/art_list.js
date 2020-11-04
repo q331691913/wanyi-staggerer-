@@ -145,5 +145,9 @@ $('tbody').on('click', '.btn-delete', function() {
         })
 
         layer.close(index)
+
+
+
+
     })
 })

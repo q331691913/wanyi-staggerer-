@@ -96,10 +96,21 @@ $(function() {
             $.each('')
         });
     })
-    $("thead").on("click", "#checkAll", function() {
+    $("#checkAll").on("click", function() {
         // let newCheckbox = document.querySelectorAll('#delete_checkbox')
         $('.delEte').prop('checked', $(this).prop('checked'))
+
     })
+    $("tbody").on('click', ".delEte", function() {
+        console.log($(".delEte").length);
+        console.log($(".delEte:checked").length);
+        if ($(".delEte:checked").length === $(".delEte").length) {
+            $("#checkAll").prop("checked", true)
+        } else {
+            $("#checkAll").prop("checked", false)
+        }
+    })
+
 
     $('.removeClass').on('click', function() {
         let flag = true
@@ -115,17 +126,19 @@ $(function() {
                                 flag = false
                                 return layer.msg('删除分类失败')
                             }
-                            initArtCateList()
 
                         }
                     })
                 }
+                initArtCateList()
             }
-        });
+        })
+
         if (flag) {
             layer.msg('删除分类成功')
 
         }
+
 
 
     })
